@@ -16,8 +16,3 @@ Enter a skill (e.g., React, Python, Java) and SkillScope will:
 
 ---
 
-## ⚙️ How It Works
-
-SkillScope uses the :contentReference[oaicite:0]{index=0} to fetch job data and processes it on the frontend to generate insights.
-
-### Data Flow
