@@ -6,5 +6,6 @@ export const cleanJobs = (jobs) => {
       location: job.location?.display_name || "",
       salary_min: job.salary_min || null,
       salary_max: job.salary_max || null,
+      apply_url: job.redirect_url || job.url || "",
     }));
   };

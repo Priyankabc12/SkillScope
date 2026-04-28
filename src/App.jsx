@@ -29,8 +29,8 @@ const formatSalaryRange = (salaryMin, salaryMax) => {
 
 export default function App() {
   const selectedSkill = "react";
-  const selectedCountryCode = "us";
-  const selectedCountryLabel = "United States";
+  const selectedCountryCode = "in";
+  const selectedCountryLabel = "India";
   const [data, setData] = useState(null);
 
   useEffect(() => {
@@ -109,6 +109,25 @@ export default function App() {
                     <span className="text-xs text-zinc-400">No matched skills found</span>
                   )}
                 </div>
+
+                {job.apply_url ? (
+                  <a
+                    href={job.apply_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-4 inline-flex rounded-lg bg-white px-4 py-2 text-sm font-medium text-black hover:bg-zinc-200 transition-colors"
+                  >
+                    Apply
+                  </a>
+                ) : (
+                  <button
+                    type="button"
+                    disabled
+                    className="mt-4 inline-flex rounded-lg bg-zinc-700 px-4 py-2 text-sm font-medium text-zinc-300 cursor-not-allowed"
+                  >
+                    Apply unavailable
+                  </button>
+                )}
               </article>
             );
           })}
