@@ -1,6 +1,14 @@
 export const SKILLS = [
     "react", "node", "mongodb", "aws", "docker",
-    "python", "java", "sql", "typescript", "next.js"
+    "python", "java", "sql", "typescript", "next.js",
+    "javascript", "html", "css", "react native", "flutter",
+    "kotlin", "swift", "ruby", "php", "laravel", "express",
+    "django", "flask", "spring", "hibernate", "maven", "gradle",
+    "docker", "kubernetes", "terraform", "ansible", "chef",
+    "puppet", "salt", "chef", "puppet", "salt", "ansible",
+    "chef", "puppet", "salt", "ansible", "chef", "puppet",
+    "salt", "ansible", "chef", "puppet", "salt", "ansible",
+    "chef", "puppet", "salt", "ansible", "chef", "puppet",
   ];
   
   export const extractSkills = (jobs) => {

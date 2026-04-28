@@ -4,10 +4,12 @@ export default function Cards({
     recommendedSkills = [],
     country = "Selected Country",
     skill = "skill",
+    currency = "USD",
+    locale = "en-US",
 }) {
-    const formattedSalary = Number(averageSalary || 0).toLocaleString("en-US", {
+    const formattedSalary = Number(averageSalary || 0).toLocaleString(locale, {
         style: "currency",
-        currency: "USD",
+        currency,
         maximumFractionDigits: 0,
     });
 
