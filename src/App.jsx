@@ -85,17 +85,16 @@ const loadData = async () => {
 };
 
 
-const handleSubmit = (e)=>{
-  e.preventDefault();
-  if (loading) return;
-  loadData();
-
-}
-
 
 const handleChange = (e) => {
   setFormData({ ...formData, [e.target.name]: e.target.value });
 };
+
+//debouncing
+useEffect(()=>{
+  let id = setTimeout(()=>{loadData()},500)
+  return ()=>clearTimeout(id);
+},[formData])
 
   const hasJobs = Boolean(data?.jobs?.length);
   const selectedCountryDetails =  COUNTRY_DETAILS[formData.country] || COUNTRY_DETAILS.gb;
@@ -126,7 +125,7 @@ const handleChange = (e) => {
             <h1 className="text-3xl font-semibold">Search for a job</h1>
 
 
-                <form action="" onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-3 w-full max-w-3xl"> 
+                <form action="" className="flex flex-col md:flex-row gap-3 w-full max-w-3xl"> 
                     <input
                         type="text"
                         className="flex-1 rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 text-white placeholder-zinc-400 outline-none focus:border-zinc-500"
@@ -165,19 +164,7 @@ const handleChange = (e) => {
                         <option value="za">South Africa</option>
                     </select>
 
-                    <button
-                        className="rounded-xl bg-white text-black px-5 py-3 font-medium hover:bg-zinc-200 transition-colors disabled:cursor-not-allowed disabled:bg-zinc-400"
-                        type="submit"
-                        disabled={loading}
-                    >
-                        {loading ? (
-                          <span className="inline-flex items-center gap-2">
-                            Searching...
-                          </span>
-                        ) : (
-                          "Search"
-                        )}
-                    </button>
+                    
                 </form>
 
       </div>

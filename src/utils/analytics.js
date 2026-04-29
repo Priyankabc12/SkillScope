@@ -1,5 +1,6 @@
 
 import { classifyJobRole } from "./classifyJobs";
+
 export const getDemand = (data) => {
     return data.count || 0;
 };
