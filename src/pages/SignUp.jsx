@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { useEffect } from "react";
 
 export default function SignUp() {
   const [formData, setFormData] = useState({
@@ -13,6 +15,14 @@ export default function SignUp() {
 
   const [error, setError] = useState("");
 
+  const userId = localStorage.getItem("UserId");
+  useEffect(()=>{
+    if(userId){
+      window.location.href = "/profile";
+    }
+  })
+
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -24,34 +34,49 @@ export default function SignUp() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    try{
+      setLoading(true);
 
-    if (
-      !formData.name ||
-      !formData.email ||
-      !formData.password ||
-      !formData.confirmPassword
-    ) {
-      setError("Please fill in all fields.");
-      return;
+      if (
+        !formData.name ||
+        !formData.email ||
+        !formData.password ||
+        !formData.confirmPassword
+      ) {
+        setError("Please fill in all fields.");
+        return;
+      }
+
+      if (formData.password !== formData.confirmPassword) {
+        setError("Passwords do not match.");
+        return;
+      }
+
+      if (formData.password.length < 6) {
+        setError("Password must be at least 6 characters.");
+        return;
+      }
+      
+      
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_BASE_URL}/auth/register`, {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password
+      })
+      localStorage.setItem("UserId", response.data[0].id);
+      window.location.href = "/profile";
+    }catch(err){
+      setError(err.response?.data?.message || err.message || "Sign up failed");
     }
-
-    if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match.");
-      return;
-    }
-
-    if (formData.password.length < 6) {
-      setError("Password must be at least 6 characters.");
-      return;
-    }
-
-    setLoading(true);
-
-    // TODO: Add authentication logic here
-
-    setTimeout(() => {
+    finally{
       setLoading(false);
-    }, 1500);
+    }
+   
+
+
+
+
+
   };
 
   return (
@@ -91,7 +116,7 @@ export default function SignUp() {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                placeholder="John Doe"
+                placeholder="Enter your Name"
                 className="rounded-xl border border-zinc-700 bg-zinc-800 px-4 py-3 text-white placeholder-zinc-500 outline-none focus:border-zinc-500 transition-colors"
               />
             </div>
@@ -111,7 +136,7 @@ export default function SignUp() {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                placeholder="you@example.com"
+                placeholder="Enter your Email"
                 className="rounded-xl border border-zinc-700 bg-zinc-800 px-4 py-3 text-white placeholder-zinc-500 outline-none focus:border-zinc-500 transition-colors"
               />
             </div>
@@ -131,7 +156,7 @@ export default function SignUp() {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                placeholder="Min. 6 characters"
+                placeholder="Enter your Password"
                 className="rounded-xl border border-zinc-700 bg-zinc-800 px-4 py-3 text-white placeholder-zinc-500 outline-none focus:border-zinc-500 transition-colors"
               />
             </div>
@@ -167,7 +192,7 @@ export default function SignUp() {
             <button
               type="submit"
               disabled={loading}
-              className="mt-1 rounded-xl bg-white px-4 py-3 text-sm font-medium text-black hover:bg-zinc-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="mt-1 rounded-xl bg-white px-4 py-3 text-sm font-medium text-black hover:bg-zinc-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">

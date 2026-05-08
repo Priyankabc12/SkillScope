@@ -7,8 +7,21 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
+
+const userId = localStorage.getItem("UserId");
+
+
 
 export default function SkillJobAnalyzerLanding() {
+  useEffect(()=>{
+  if(userId){
+    window.location.href = "/profile";
+  }
+}, [userId])
+
+
+
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-white overflow-hidden font-sans relative">
       {/* Background Grid */}

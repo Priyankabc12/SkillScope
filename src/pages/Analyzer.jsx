@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-
+import axios from "axios";
 import { fetchJobs } from "../utils/fetchJobs";
 import { cleanJobs } from "../utils/processJobs";
 
@@ -40,6 +40,15 @@ const COUNTRY_DETAILS = {
 };
 
 export default function Analyzer() {
+
+  useEffect(()=>{
+    if(!localStorage.getItem("UserId")){
+      window.location.href = "/";
+    }
+
+  },[localStorage.getItem("UserId")])
+
+
   const [data, setData] = useState(null);
 
   const [loading, setLoading] = useState(false);
@@ -148,6 +157,16 @@ export default function Analyzer() {
     });
   };
 
+  const updateJobs = async(jobs)=>{
+    try{
+      const userId = localStorage.getItem("UserId");
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_BASE_URL}/user/jobs`,{ userId:userId, job:jobs });
+
+    }catch(err){
+      console.error("Failed to update user jobs:", err);
+    }
+  }
+  
   useEffect(() => {
     let id = setTimeout(() => {
       loadData();
@@ -187,6 +206,9 @@ export default function Analyzer() {
 
   const topCompanyJobs =
     data?.jobs?.slice(0, 10) || [];
+
+
+
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-white overflow-hidden relative font-sans">
@@ -246,35 +268,7 @@ export default function Analyzer() {
         </nav>
       </header>
 
-      {/* Hero Section
-      <section className="relative z-10 px-6 md:px-10 pt-20 pb-14">
-
-        <div className="max-w-6xl mx-auto text-center">
-
-          <p className="uppercase tracking-[0.3em] text-[#00D9FF] text-xs mb-6">
-            Live Career Intelligence
-          </p>
-
-          <h1 className="text-5xl md:text-7xl font-semibold leading-[1.05] tracking-tight">
-            ANALYZE SKILLS.
-            <br />
-            DISCOVER
-            <span className="text-[#00D9FF]">
-              {" "}OPPORTUNITIES.
-            </span>
-          </h1>
-
-          <p className="mt-8 text-gray-400 text-lg leading-relaxed max-w-3xl mx-auto">
-            Explore real-time jobs, salary insights,
-            and trending skills using live market
-            data from global job listings.
-          </p>
-
-        </div>
-
-      </section> */}
-
-      {/* Search */}
+    
       <section className="relative z-10 px-6 pb-14">
 
         <div className="max-w-5xl mx-auto border border-white/5 bg-white/[0.02] rounded-[32px] p-6 md:p-8 backdrop-blur-sm">
@@ -411,14 +405,17 @@ export default function Analyzer() {
                       </div>
 
                       {job.apply_url ? (
-                        <a
-                          href={job.apply_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
+                        <button
+                          type="button"
+                          onClick={() => {
+                            console.log("Job Applied:", job);
+                            updateJobs(job);
+                            window.open(job.apply_url, "_blank");
+                          }}
                           className="mt-6 inline-flex rounded-full border border-white/10 px-5 py-2 text-sm text-white hover:border-cyan-400/30 hover:text-cyan-300 transition"
                         >
                           Apply Now
-                        </a>
+                        </button>
                       ) : (
                         <button
                           type="button"

@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { Link } from "react-router-dom";
-
+import axios from "axios";
 export default function SignIn() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
@@ -11,15 +11,39 @@ export default function SignIn() {
     setError("");
   };
 
+  const userId = localStorage.getItem("UserId");
+    useEffect(()=>{
+      if(userId){
+        window.location.href = "/profile";
+      }
+    },[localStorage.getItem("UserId")])
+  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.email || !formData.password) {
-      setError("Please fill in all fields.");
-      return;
+    try{
+      setLoading(true);
+      if (!formData.email || !formData.password) {
+
+        setError("Please fill in all fields.");
+        return;
+      }
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_BASE_URL}/auth/login`,{
+        password: formData.password,
+        email: formData.email
+      })
+      localStorage.setItem("UserId", res.data[0].id);
+      window.location.href = "/profile";
+    }catch(err)
+    {
+      setError(err.response?.data?.message || err.message || "Sign in failed");
+    }finally{
+      setLoading(false)
     }
-    setLoading(true);
+  
+
     // TODO: plug in your auth logic here (Firebase, Supabase, JWT, etc.)
-    setTimeout(() => setLoading(false), 1500);
+
   };
 
   return (
@@ -72,7 +96,7 @@ export default function SignIn() {
             <button
               type="submit"
               disabled={loading}
-              className="mt-1 rounded-xl bg-white px-4 py-3 text-sm font-medium text-black hover:bg-zinc-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="mt-1 rounded-xl bg-white px-4 py-3 text-sm font-medium text-black hover:bg-zinc-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">

@@ -1,31 +1,115 @@
+import { Loader } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
+import axios from "axios";
 
 export default function Profile() {
   const [visitedLinks, setVisitedLinks] = useState([]);
 
-  const location = useLocation();
-
-  const user =
-    JSON.parse(localStorage.getItem("user")) || {};
-
+  const [user, setUser] = useState({});
+  const [loading, setLoading] = useState(true);
+ 
+  const userId = localStorage.getItem("UserId");
   useEffect(() => {
-    const savedLinks =
-      JSON.parse(localStorage.getItem("visitedLinks")) || [];
-
-    if (!savedLinks.includes(location.pathname)) {
-      const updatedLinks = [...savedLinks, location.pathname];
-
-      localStorage.setItem(
-        "visitedLinks",
-        JSON.stringify(updatedLinks)
-      );
-
-      setVisitedLinks(updatedLinks);
-    } else {
-      setVisitedLinks(savedLinks);
+    if (!userId) {
+      window.location.href = "/";
+      return;
     }
-  }, [location]);
+  }, [localStorage.getItem("UserId")]);
+
+   
+  useEffect(()=>{
+
+    const fetchUserData = async () => {
+      try{
+       
+        setLoading(true)
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_BASE_URL}/user/profile?userId=${userId}`);
+        setUser(res.data);
+
+   
+
+
+      }catch(err){
+        console.error("Failed to fetch user data:", err);
+      }finally{
+        setLoading(false)
+      }
+    }
+
+    const fetchUserJobs = async()=>{
+      try{
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_BASE_URL}/user/jobs?userId=${userId}`);
+        const jobs = res.data;
+        const links = jobs.map(job => job.apply_url);
+        setVisitedLinks(links);
+      }catch(err){
+        console.error("Failed to fetch user jobs:", err);
+      }
+    }
+    fetchUserData();
+    fetchUserJobs();
+  },[localStorage.getItem("UserId")])
+ 
+  if(loading){
+    return (
+    
+      <div className="min-h-screen bg-[#0A0A0A] text-white overflow-hidden relative font-sans">
+        <div className="absolute inset-0 opacity-[0.06]">
+          <div
+            className="h-full w-full"
+            style={{
+              backgroundImage:
+                "linear-gradient(to right, #00D9FF 1px, transparent 1px), linear-gradient(to bottom, #00D9FF 1px, transparent 1px)",
+              backgroundSize: "80px 80px",
+            }}
+          />
+        </div>
+
+        {/* Glow */}
+        <div className="absolute top-[-200px] left-[-120px] w-[500px] h-[500px] bg-cyan-500/10 blur-[180px] rounded-full" />
+        <div className="absolute bottom-[-200px] right-[-120px] w-[500px] h-[500px] bg-cyan-400/10 blur-[180px] rounded-full" />
+
+        {/* Navbar */}
+        <header className="relative z-20 border-b border-cyan-500/10">
+          <nav className="max-w-7xl mx-auto px-6 md:px-10 py-6 flex items-center justify-between">
+
+            <Link
+              to="/"
+              className="text-xl tracking-[0.25em] font-semibold text-white"
+            >
+              SKILL<span className="text-[#00D9FF]">SCOPE</span>
+            </Link>
+
+            <div className="hidden md:flex items-center gap-10 text-sm text-gray-300">
+
+              <Link
+                to="/analyzer"
+                className="relative group transition"
+              >
+                Analyzer
+
+                <span className="absolute left-0 -bottom-1 h-[1px] w-0 bg-[#00D9FF] transition-all duration-300 group-hover:w-full" />
+              </Link>
+
+              <Link
+                to="/profile"
+                className="relative group text-[#00D9FF]"
+              >
+                Profile
+              </Link>
+
+            </div>
+          </nav>
+        </header>
+        
+        <div className="min-h-screen flex items-center justify-center">
+          <Loader className="animate-spin" size={48} color="#00D9FF" />
+        </div>
+        
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-white overflow-hidden relative font-sans">
