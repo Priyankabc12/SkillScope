@@ -3,8 +3,9 @@ import { useEffect, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
 import axios from "axios";
 
+
 export default function Profile() {
-  const [visitedLinks, setVisitedLinks] = useState([]);
+  const [jobs, setJobs] = useState([]);
 
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState(true);
@@ -40,13 +41,13 @@ export default function Profile() {
     const fetchUserJobs = async()=>{
       try{
         const res = await axios.get(`${import.meta.env.VITE_BACKEND_BASE_URL}/user/jobs?userId=${userId}`);
-        const jobs = res.data;
-        const links = jobs.map(job => job.apply_url);
-        setVisitedLinks(links);
+        const fetched = res.data || [];
+        setJobs(fetched);
       }catch(err){
         console.error("Failed to fetch user jobs:", err);
       }
     }
+
     fetchUserData();
     fetchUserJobs();
   },[localStorage.getItem("UserId")])
@@ -199,7 +200,7 @@ export default function Profile() {
 
           </div>
 
-          {/* Visited Pages */}
+          {/* Visited Jobs (show like Analyzer) */}
           <div className="border border-white/5 bg-white/[0.02] rounded-[32px] p-8 md:p-10 backdrop-blur-sm">
 
             <div className="mb-8">
@@ -209,45 +210,42 @@ export default function Profile() {
               </p>
 
               <h2 className="text-4xl font-semibold tracking-tight">
-                Visited Pages
+                Visited Jobs
               </h2>
 
             </div>
 
-            {visitedLinks.length ? (
+            {/* Job list only - no summary cards */}
 
+            {jobs.length ? (
               <div className="grid md:grid-cols-2 gap-5">
-
-                {visitedLinks.map((link, index) => (
-
+                {jobs.map((job, index) => (
                   <div
-                    key={index}
+                    key={`${job.company}-${job.title}-${index}`}
                     className="group border border-white/5 hover:border-cyan-400/20 bg-black/30 rounded-2xl p-5 transition duration-300"
                   >
+                    <h3 className="text-lg font-semibold text-white">{job.company}</h3>
+                    <p className="text-zinc-300 mt-1">{job.title}</p>
+                    <p className="text-sm text-zinc-400 mt-3 line-clamp-4">{job.description || 'No description available.'}</p>
 
-                    <p className="text-zinc-300 mb-3">
-                      {link}
-                    </p>
+                    <div className="mt-4 flex items-center gap-3">
+                   
 
-                    <Link
-                      to={link}
-                      className="inline-flex items-center gap-2 text-sm text-[#00D9FF] hover:text-white transition"
-                    >
-                      Visit Page →
-                    </Link>
-
+                      {job.apply_url && (
+                        <button
+                        type="button"
+                        onClick={() => window.open(job.apply_url, "_blank")}
+                        className="inline-flex rounded-full border border-white/10 px-4 py-2 text-sm text-white hover:border-cyan-400/30 cursor-pointer"
+                      >
+                        View / Apply
+                      </button>
+                      )}
+                    </div>
                   </div>
-
                 ))}
-
               </div>
-
             ) : (
-
-              <p className="text-zinc-500">
-                No visited pages yet.
-              </p>
-
+              <p className="text-zinc-500">No visited jobs yet.</p>
             )}
 
           </div>
