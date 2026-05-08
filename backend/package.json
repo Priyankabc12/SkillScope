@@ -1,0 +1,40 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "SkillScope backend",
+  "keywords": [
+    "jobfinding"
+  ],
+  "homepage": "https://github.com/amaan1114/SkillScope#readme",
+  "bugs": {
+    "url": "https://github.com/amaan1114/SkillScope/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amaan1114/SkillScope.git"
+  },
+  "license": "ISC",
+  "author": "Amaan",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "generate": "drizzle-kit generate --config=drizzle.config.js",
+    "migrate": "drizzle-kit migrate --config=drizzle.config.js",
+    "push": "drizzle-kit push --config=drizzle.config.js",
+    "studio": "drizzle-kit studio --config=drizzle.config.js",
+    "dev":"node index.js"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^1.1.0",
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "drizzle-orm": "^0.45.2",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.31.10",
+    "tsx": "^4.21.0"
+  }
+}
