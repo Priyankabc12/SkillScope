@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import LandingPage from "./pages/LandingPage";
 import Analyzer from "./pages/Analyzer";
-import SignIn from "./pages/SignIn";
+import SignIn from "./pages/SignIN";
 import SignUp from "./pages/SignUp";
 import Profile from "./pages/Profile";
 

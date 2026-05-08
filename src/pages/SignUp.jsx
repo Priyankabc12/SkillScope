@@ -2,17 +2,17 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function SignUp() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
-
   const [loading, setLoading] = useState(false);
-
   const [error, setError] = useState("");
 
   const userId = localStorage.getItem("UserId");
@@ -24,11 +24,7 @@ export default function SignUp() {
 
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-
+    setFormData({ ...formData, [e.target.name]: e.target.value });
     setError("");
   };
 
@@ -80,36 +76,35 @@ export default function SignUp() {
   };
 
   return (
-    <div className="bg-black min-h-screen flex items-center justify-center px-4">
-      
-      <div className="w-full max-w-md">
+    <div className="min-h-screen w-screen bg-[#070d0d] flex items-center justify-center px-4 relative overflow-hidden">
 
-        <div className="mb-8 text-center">
-          <h1 className="text-3xl font-semibold text-white">
-            Create account
-          </h1>
+      <div className="absolute inset-0"
+        style={{
+          backgroundImage: "linear-gradient(rgba(0,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,255,0.03) 1px, transparent 1px)",
+          backgroundSize: "60px 60px"
+        }}
+      />
 
-          <p className="mt-2 text-sm text-zinc-400">
-            Start your job search today
-          </p>
-        </div>
+      <div className="absolute top-1/3 right-1/3 w-72 h-72 rounded-full"
+        style={{ background: "radial-gradient(circle, rgba(0,200,220,0.08) 0%, transparent 70%)" }}
+      />
 
-        <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-8">
+      <div className="absolute top-6 left-8">
+        <span className="text-white font-bold text-lg tracking-widest uppercase">
+          SKILL<span className="text-cyan-400">SCOPE</span>
+        </span>
+      </div>
 
-          <form
-            onSubmit={handleSubmit}
-            className="flex flex-col gap-5"
-          >
+      <div className="relative z-10 w-full max-w-md">
+        <div className="rounded-2xl border border-cyan-900/40 bg-[#0d1717]/80 backdrop-blur-sm p-8 shadow-2xl">
 
-            {/* Name */}
+          <h1 className="text-2xl font-bold text-white mb-1">Create account</h1>
+          <p className="text-xs text-cyan-400/70 mb-8 tracking-wide uppercase">Start your job search today</p>
+
+          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+
             <div className="flex flex-col gap-1.5">
-              <label
-                className="text-sm text-zinc-400"
-                htmlFor="name"
-              >
-                Full name
-              </label>
-
+              <label className="text-xs text-cyan-400/60 tracking-widest uppercase" htmlFor="name">Full name</label>
               <input
                 id="name"
                 type="text"
@@ -121,15 +116,8 @@ export default function SignUp() {
               />
             </div>
 
-            {/* Email */}
             <div className="flex flex-col gap-1.5">
-              <label
-                className="text-sm text-zinc-400"
-                htmlFor="email"
-              >
-                Email
-              </label>
-
+              <label className="text-xs text-cyan-400/60 tracking-widest uppercase" htmlFor="email">Email</label>
               <input
                 id="email"
                 type="email"
@@ -137,19 +125,12 @@ export default function SignUp() {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="Enter your Email"
-                className="rounded-xl border border-zinc-700 bg-zinc-800 px-4 py-3 text-white placeholder-zinc-500 outline-none focus:border-zinc-500 transition-colors"
+                className="rounded-xl border border-cyan-900/50 bg-[#0a1414] px-4 py-3 text-white placeholder-zinc-600 outline-none focus:border-cyan-500/60 transition-colors text-sm"
               />
             </div>
 
-            {/* Password */}
             <div className="flex flex-col gap-1.5">
-              <label
-                className="text-sm text-zinc-400"
-                htmlFor="password"
-              >
-                Password
-              </label>
-
+              <label className="text-xs text-cyan-400/60 tracking-widest uppercase" htmlFor="password">Password</label>
               <input
                 id="password"
                 type="password"
@@ -157,19 +138,12 @@ export default function SignUp() {
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="Enter your Password"
-                className="rounded-xl border border-zinc-700 bg-zinc-800 px-4 py-3 text-white placeholder-zinc-500 outline-none focus:border-zinc-500 transition-colors"
+                className="rounded-xl border border-cyan-900/50 bg-[#0a1414] px-4 py-3 text-white placeholder-zinc-600 outline-none focus:border-cyan-500/60 transition-colors text-sm"
               />
             </div>
 
-            {/* Confirm Password */}
             <div className="flex flex-col gap-1.5">
-              <label
-                className="text-sm text-zinc-400"
-                htmlFor="confirmPassword"
-              >
-                Confirm password
-              </label>
-
+              <label className="text-xs text-cyan-400/60 tracking-widest uppercase" htmlFor="confirmPassword">Confirm password</label>
               <input
                 id="confirmPassword"
                 type="password"
@@ -177,48 +151,35 @@ export default function SignUp() {
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 placeholder="••••••••"
-                className="rounded-xl border border-zinc-700 bg-zinc-800 px-4 py-3 text-white placeholder-zinc-500 outline-none focus:border-zinc-500 transition-colors"
+                className="rounded-xl border border-cyan-900/50 bg-[#0a1414] px-4 py-3 text-white placeholder-zinc-600 outline-none focus:border-cyan-500/60 transition-colors text-sm"
               />
             </div>
 
-            {/* Error */}
-            {error && (
-              <p className="text-sm text-red-400 text-center">
-                {error}
-              </p>
-            )}
+            {error && <p className="text-sm text-red-400 text-center">{error}</p>}
 
-            {/* Button */}
             <button
               type="submit"
               disabled={loading}
-              className="mt-1 rounded-xl bg-white px-4 py-3 text-sm font-medium text-black hover:bg-zinc-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+              className="mt-1 rounded-xl px-4 py-3 text-sm font-semibold text-black transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              style={{ background: "linear-gradient(135deg, #00e5ff, #00b8cc)" }}
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
                   <span className="w-4 h-4 rounded-full border-2 border-black border-t-transparent animate-spin" />
                   Creating account…
                 </span>
-              ) : (
-                "Create account"
-              )}
+              ) : "Create Account"}
             </button>
 
           </form>
         </div>
 
-        <p className="mt-6 text-center text-sm text-zinc-500">
+        <p className="mt-6 text-center text-sm text-zinc-600">
           Already have an account?{" "}
-
-          <Link
-            to="/signin"
-            className="text-white hover:underline"
-          >
+          <button onClick={() => navigate("/signin")} className="text-cyan-400 hover:text-cyan-300 transition-colors">
             Sign in
-          </Link>
-
+          </button>
         </p>
-
       </div>
     </div>
   );
