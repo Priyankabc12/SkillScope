@@ -1,6 +1,7 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
-export default function SignIn({ onNavigate }) {
+export default function SignIn() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -88,9 +89,9 @@ export default function SignIn({ onNavigate }) {
 
         <p className="mt-6 text-center text-sm text-zinc-500">
           Don't have an account?{" "}
-          <button onClick={() => onNavigate("signup")} className="text-white hover:underline">
+          <Link to="/signup" className="text-white hover:underline">
             Sign up
-          </button>
+          </Link>
         </p>
 
       </div>

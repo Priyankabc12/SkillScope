@@ -1,55 +1,90 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
-export default function SignUp({ onNavigate }) {
+export default function SignUp() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
+
   const [loading, setLoading] = useState(false);
+
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+
     setError("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
+    if (
+      !formData.name ||
+      !formData.email ||
+      !formData.password ||
+      !formData.confirmPassword
+    ) {
       setError("Please fill in all fields.");
       return;
     }
+
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match.");
       return;
     }
+
     if (formData.password.length < 6) {
       setError("Password must be at least 6 characters.");
       return;
     }
 
     setLoading(true);
-    // TODO: plug in your auth logic here (Firebase, Supabase, JWT, etc.)
-    setTimeout(() => setLoading(false), 1500);
+
+    // TODO: Add authentication logic here
+
+    setTimeout(() => {
+      setLoading(false);
+    }, 1500);
   };
 
   return (
     <div className="bg-black min-h-screen flex items-center justify-center px-4">
+      
       <div className="w-full max-w-md">
 
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-semibold text-white">Create account</h1>
-          <p className="mt-2 text-sm text-zinc-400">Start your job search today</p>
+          <h1 className="text-3xl font-semibold text-white">
+            Create account
+          </h1>
+
+          <p className="mt-2 text-sm text-zinc-400">
+            Start your job search today
+          </p>
         </div>
 
         <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-8">
-          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
 
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col gap-5"
+          >
+
+            {/* Name */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-sm text-zinc-400" htmlFor="name">Full name</label>
+              <label
+                className="text-sm text-zinc-400"
+                htmlFor="name"
+              >
+                Full name
+              </label>
+
               <input
                 id="name"
                 type="text"
@@ -61,8 +96,15 @@ export default function SignUp({ onNavigate }) {
               />
             </div>
 
+            {/* Email */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-sm text-zinc-400" htmlFor="email">Email</label>
+              <label
+                className="text-sm text-zinc-400"
+                htmlFor="email"
+              >
+                Email
+              </label>
+
               <input
                 id="email"
                 type="email"
@@ -74,8 +116,15 @@ export default function SignUp({ onNavigate }) {
               />
             </div>
 
+            {/* Password */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-sm text-zinc-400" htmlFor="password">Password</label>
+              <label
+                className="text-sm text-zinc-400"
+                htmlFor="password"
+              >
+                Password
+              </label>
+
               <input
                 id="password"
                 type="password"
@@ -87,8 +136,15 @@ export default function SignUp({ onNavigate }) {
               />
             </div>
 
+            {/* Confirm Password */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-sm text-zinc-400" htmlFor="confirmPassword">Confirm password</label>
+              <label
+                className="text-sm text-zinc-400"
+                htmlFor="confirmPassword"
+              >
+                Confirm password
+              </label>
+
               <input
                 id="confirmPassword"
                 type="password"
@@ -100,10 +156,14 @@ export default function SignUp({ onNavigate }) {
               />
             </div>
 
+            {/* Error */}
             {error && (
-              <p className="text-sm text-red-400 text-center">{error}</p>
+              <p className="text-sm text-red-400 text-center">
+                {error}
+              </p>
             )}
 
+            {/* Button */}
             <button
               type="submit"
               disabled={loading}
@@ -124,9 +184,14 @@ export default function SignUp({ onNavigate }) {
 
         <p className="mt-6 text-center text-sm text-zinc-500">
           Already have an account?{" "}
-          <button onClick={() => onNavigate("signin")} className="text-white hover:underline">
+
+          <Link
+            to="/signin"
+            className="text-white hover:underline"
+          >
             Sign in
-          </button>
+          </Link>
+
         </p>
 
       </div>
