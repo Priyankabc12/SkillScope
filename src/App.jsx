@@ -5,6 +5,9 @@ import { getDemand, getAverageSalary, getRoleDistribution } from "./utils/analyt
 import { extractSkills, SKILLS } from "./utils/extractSkills";
 
 import Cards from "./components/cards";
+// import { useState } from "react";
+import SignIn from "./pages/SignIN";
+import SignUp from "./pages/SignUp";
 
 const COUNTRY_DETAILS = {
   gb: { label: "United Kingdom", currency: "GBP", locale: "en-GB" },
@@ -31,6 +34,7 @@ const COUNTRY_DETAILS = {
 
 
 export default function App() {
+  const [page,setPage]=useState("home")
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -113,7 +117,8 @@ useEffect(()=>{
     .map(([skill]) => skill);
     
   const topCompanyJobs = data?.jobs?.slice(0, 10) || [];
-
+  if (page === "signin") return <SignIn onNavigate={setPage} />;
+  if (page === "signup") return <SignUp onNavigate={setPage} />;
   return (
 
 
@@ -122,7 +127,23 @@ useEffect(()=>{
       {/* Search Bar */}
 
       <div className="flex flex-col items-center justify-center gap-4 py-8 px-4 text-white">
-            <h1 className="text-3xl font-semibold">Search for a job</h1>
+            <div className="w-full max-w-3xl flex justify-between items-center">
+  <h1 className="text-3xl font-semibold">Search for a job</h1>
+  <div className="flex gap-3">
+    <button
+      onClick={() => setPage("signin")}
+      className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm text-white hover:bg-zinc-800 transition-colors"
+    >
+      Sign in
+    </button>
+    <button
+      onClick={() => setPage("signup")}
+      className="rounded-xl bg-white px-4 py-2 text-sm font-medium text-black hover:bg-zinc-200 transition-colors"
+    >
+      Sign up
+    </button>
+  </div>
+</div>
 
 
                 <form action="" className="flex flex-col md:flex-row gap-3 w-full max-w-3xl"> 
