@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link} from "react-router-dom";
 import axios from "axios";
 import { fetchJobs } from "../utils/fetchJobs";
 import { cleanJobs } from "../utils/processJobs";
@@ -53,13 +53,14 @@ export default function Analyzer() {
 
   const [loading, setLoading] = useState(false);
 
-  const location = useLocation();
+
 
   const [formData, setFormData] = useState({
     skill: "",
     city: "",
     country: "gb",
   });
+
 
   useEffect(() => {
     const savedLinks =
@@ -75,6 +76,7 @@ export default function Analyzer() {
     }
   }, [location]);
 
+
   const getJobSkills = (description = "") => {
     const text = description.toLowerCase();
 
@@ -82,6 +84,7 @@ export default function Analyzer() {
       text.includes(skill)
     );
   };
+
 
   const formatSalaryRange = (
     salaryMin,
@@ -107,6 +110,7 @@ export default function Analyzer() {
 
     return `Up to ${format(salaryMax)}`;
   };
+
 
   const loadData = async () => {
     try {
@@ -150,12 +154,14 @@ export default function Analyzer() {
     }
   };
 
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
+
 
   const updateJobs = async(jobs)=>{
     try{
@@ -262,6 +268,19 @@ export default function Analyzer() {
 
               <span className="absolute left-0 -bottom-1 h-[1px] w-0 bg-[#00D9FF] transition-all duration-300 group-hover:w-full" />
             </Link>
+
+            <button
+              className="relative group transition hover:text-cyan-400 cursor-pointer"
+              onClick={()=>{
+                localStorage.removeItem("UserId")
+                window.location.href = "/";
+              }}
+
+            >
+              Sign Out
+
+              <span className="absolute left-0 -bottom-1 h-[1px] w-0 bg-[#00D9FF] transition-all duration-300 group-hover:w-full" />
+            </button>
 
           </div>
 

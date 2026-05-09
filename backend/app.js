@@ -6,9 +6,9 @@ import { authRouter } from './modules/auth/auth.route.js';
 import { userRouter } from './modules/user/user.route.js';
 
 export const app = express();
-
+dotenv.config();
 const corsOptions = {
-    origin: "http://localhost:5173", // Update this to match your frontend URL
+    origin: process.env.FRONTEND_URL, // Update this to match your frontend URL
     credentials: true,
 };
 
